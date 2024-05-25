@@ -1,35 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+
+import React, { useState } from 'react';
+import Question from './Question';
+import Result from './Result';
+import './App.css';
+
+const questions = [
+  {
+    questionText: "What is the capital of France?",
+    answerOptions: [
+      { answerText: "Berlin", isCorrect: false },
+      { answerText: "Madrid", isCorrect: false },
+      { answerText: "Paris", isCorrect: true },
+      { answerText: "Lisbon", isCorrect: false }
+    ]
+  },
+  {
+    questionText: "Who is the CEO of Tesla?",
+    answerOptions: [
+      { answerText: "Jeff Bezos", isCorrect: false },
+      { answerText: "Elon Musk", isCorrect: true },
+      { answerText: "Bill Gates", isCorrect: false },
+      { answerText: "Tony Stark", isCorrect: false }
+    ]
+  },
+ 
+  {
+    questionText: "What is the Capital of India?",
+    answerOptions: [
+      { answerText: "Mumbai", isCorrect: false },
+      { answerText: "Ahamdabad", isCorrect: false },
+      { answerText: "Delhi", isCorrect: true },
+      { answerText: "Banglore", isCorrect: false }
+    ]
+  },
+  {
+    questionText: "Who is the Founder of Zomato?",
+    answerOptions: [
+      { answerText: "Aman Gupta", isCorrect: false },
+      { answerText: "Depender Goyal", isCorrect: true },
+      { answerText: "Ashneer Grover", isCorrect: false },
+      { answerText: "Tony Stark", isCorrect: false }
+    ]
+  },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+
+  const handleAnswerOptionClick = (isCorrect) => {
+    if (isCorrect) {
+      setScore(score + 1);
+    }
+    const nextQuestion = currentQuestion + 1;
+    if (nextQuestion < questions.length) {
+      setCurrentQuestion(nextQuestion);
+    } else {
+      setShowResult(true);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      {showResult ? (
+        <Result score={score} total={questions.length} />
+      ) : (
+        <Question
+          question={questions[currentQuestion]}
+          handleAnswerOptionClick={handleAnswerOptionClick}
+        />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
